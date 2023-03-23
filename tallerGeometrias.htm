@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Objetos Geometry en THREE.js</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script type="module">
+			import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+			//Creates scene and camera
+
+
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+
+			//Creates renderer and adds it to the DOM
+
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+
+			//The Box!
+            //Luz
+            /*ar ambiColor = "0x983434";
+            var ambientLight = new THREE.AmbientLight(ambiColor);
+            scene.add(ambientLight);*/
+            //Luz 1
+            var spotLight0 = new THREE.SpotLight(0xcccccc); //Luz de escenario
+            spotLight0.position.set(-10, 30, -10);
+            spotLight0.lookAt(10,10,1);
+            scene.add(spotLight0);
+            //luz 2
+            var spotLight0 = new THREE.SpotLight(0xcccccc);
+            spotLight0.position.set(-10, 30, -10);
+            spotLight0.lookAt(-10,-10,1);
+            scene.add(spotLight0);
+
+			//luz 3
+            var hemiLight = new THREE.HemisphereLight(0xde8cc4,0x6343ad, 0.4);
+            hemiLight.position.set(200, 300, 100);
+            scene.add(hemiLight);
+			//Arreglo del color
+            var colorsito =[{ color: 0x46a8af },{color: 0x6343ad},{color: 0xde8cc4}];
+			//Arreglo de dimesiones de cada geometria
+			var Geometry=[[12, 12, 12 ],[5, 30, 27],[5, 20, 32]]
+			
+				//Creacionde las 3 Geometrias con sus respectivos materiales 
+				var geometrybox = new THREE.BoxGeometry( Geometry[0][0],Geometry[0][1],Geometry[0][2]);
+				var geometrysphere = new THREE.SphereGeometry( Geometry[1][0],Geometry[1][1],Geometry[1][2] );
+				var geometrycone = new THREE.ConeGeometry(Geometry[2][0],Geometry[2][1],Geometry[2][2]);
+				//Materiales
+				var material2 = new THREE.MeshLambertMaterial(  {color:colorsito[1], wireframe:true} );
+				var material1 = new THREE.MeshPhongMaterial( colorsito[0] ); // Marterial basico
+				var material3 = new THREE.MeshToonMaterial( colorsito[2] );
+				//Creacion arreglo obj mesh
+				var meshiat = [[geometrybox,material1],[geometrysphere,material2],[geometrycone,material3]];
+				//Agregar los obj a la escena 
+				var cube = new THREE.Mesh( meshiat[0][0], meshiat[0][1] );
+				scene.add( cube );
+
+				var sphere = new THREE.Mesh( meshiat[1][0], meshiat[1][1] );
+				scene.add( sphere );
+			
+				var cone = new THREE.Mesh( meshiat[2][0], meshiat[2][1] );
+				scene.add( cone );
+
+
+			camera.position.z = 40;
+
+
+			//Rendering
+				var delta = 0.005 // velocidad de rotacion
+            
+              function renderiza() {
+			  requestAnimationFrame( renderiza );
+			 //Rotacion de cada geomteria en su respectivo eje
+			  cone.rotation.x -= 2*delta;
+              cube.rotation.z -= 2*delta;
+              sphere.rotation.y -= 2*delta;
+			  
+			  sphere.position.set(-20,0,0); //posicion
+              cube.position.set(20,0,0);
+				
+			  
+			  renderer.render( scene, camera );
+			}
+			renderiza();
+</script>
+</body>
+</html>
